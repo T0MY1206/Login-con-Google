@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    img {
+      border-radius: 50%;
+      margin: 20px 0;
+    }
+
+    a {
+      color: #ffffff;
+      background-color: #e53935;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Perfil</h1>
+  <p>Nombre: <%= user.displayName %>
+  </p>
+  <p>Email: <%= user.emails[0].value %>
+  </p>
+  <img src="<%= user.photos[0].value %>" alt="avatar" width="100" height="100" />
+  <br><a href="/logout">Cerrar sesión</a>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login con Google</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    a {
+      color: #ffffff;
+      background-color: #1a73e8;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background-color: #1669c1;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bienvenido</h1>
+  <% if (user) { %>
+    <p>Hola, <%= user.displayName %>!</p>
+    <a href="/profile">Ir a perfil</a><br><br>
+    <a href="/logout">Cerrar sesión</a>
+    <% } else { %>
+      <a href="/auth/google">Iniciar sesión con Google</a>
+      <% } %>
+</body>
+
+</html>
