@@ -1,6 +1,9 @@
 # Login con Google
 
-Aplicación web mínima en **Node.js** que permite iniciar sesión con **Google** mediante **OAuth 2.0**, mantener la sesión del usuario y mostrar una página de perfil con nombre, correo y foto.
+Hay **dos formas** de usar el proyecto:
+
+1. **Node.js + Express** (local o cualquier hosting con servidor): OAuth con Passport y sesión en servidor.
+2. **Sitio estático en `docs/`** para **GitHub Pages**: login con [Google Identity Services](https://developers.google.com/identity/gsi/web) en el navegador (solo hace falta el **ID de cliente** público; no uses el `client_secret` en el frontend).
 
 ## Tecnologías
 
@@ -20,10 +23,13 @@ Aplicación web mínima en **Node.js** que permite iniciar sesión con **Google*
 1. Crea un proyecto (o usa uno existente) en [Google Cloud Console](https://console.cloud.google.com/).
 2. Habilita la **Google+ API** / **People API** si tu flujo lo requiere (OAuth de usuario suele funcionar con pantalla de consentimiento configurada).
 3. En **APIs y servicios** → **Credenciales**, crea un ID de cliente **OAuth 2.0** tipo **Aplicación web**.
-4. En **URIs de redireccionamiento autorizados**, añade la URL de callback de tu app, por ejemplo:
-   - Desarrollo: `http://localhost:3000/auth/google/callback`
-   - Producción: `https://tu-dominio.com/auth/google/callback`
-5. Copia el **ID de cliente** y el **secreto de cliente** (no los subas al repositorio).
+4. **Orígenes JavaScript autorizados** (necesario para la versión estática / GitHub Pages):
+   - `https://TU_USUARIO.github.io` (sitio de proyecto en GitHub Pages)
+   - Para probar el sitio estático en local con un servidor HTTP: `http://localhost:PUERTO` (por ejemplo el que use `npx serve docs`).
+5. En **URIs de redireccionamiento autorizados**, para la app **Express** añade por ejemplo:
+   - `http://localhost:3000/auth/google/callback`
+   - `https://tu-dominio.com/auth/google/callback`
+6. Copia el **ID de cliente** y el **secreto de cliente** (el secreto solo sirve para la app Node; no lo subas al repo ni lo pongas en `docs/`).
 
 ## Instalación
 
@@ -55,6 +61,17 @@ Equivalente a `node server.js`.
 
 Abre [http://localhost:3000](http://localhost:3000) (o el puerto definido en `PORT`).
 
+## GitHub Pages (versión estática en `docs/`)
+
+GitHub Pages **no ejecuta Node**; usa la carpeta `docs/` con HTML/JS.
+
+1. En el repositorio: **Settings → Pages → Build and deployment → Source**: rama `main` (o la que uses) y carpeta **`/docs`**.
+2. Edita `docs/config.js` y pon tu `GOOGLE_CLIENT_ID` (el mismo ID de cliente OAuth; sin `client_secret`).
+3. En Google Cloud, en **Orígenes JavaScript autorizados**, incluye `https://TU_USUARIO.github.io` (y la URL exacta si usas dominio personalizado).
+4. Haz push. La app quedará en `https://TU_USUARIO.github.io/NOMBRE_DEL_REPO/`.
+
+La sesión en el navegador usa `sessionStorage` (solo demostración). El JWT no se verifica en un servidor; para producción con datos sensibles conviene un backend que valide el token.
+
 ## Rutas principales
 
 | Ruta | Descripción |
@@ -67,9 +84,9 @@ Abre [http://localhost:3000](http://localhost:3000) (o el puerto definido en `PO
 
 ## Notas de seguridad (producción)
 
-- El **secreto de sesión** está fijado en código (`secret: 'secretkey'`). En producción debería ser una cadena larga y aleatoria definida por variable de entorno.
-- No incluyas **IDs ni secretos reales** en el repositorio ni en ejemplos públicos.
-- Configura `cookie` de sesión con `secure: true` y `sameSite` adecuados cuando uses HTTPS.
+- En **Express**, define `SESSION_SECRET` en producción y no uses el valor por defecto de desarrollo.
+- No subas **`GOOGLE_CLIENT_SECRET`** ni `.env` al repositorio.
+- La versión **GitHub Pages** solo debe incluir el **client ID** público en `docs/config.js`, nunca el secreto.
 
 ## Licencia
 
